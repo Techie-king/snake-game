@@ -24,8 +24,23 @@ var snakeBody = [];
 //game over function
 var gameOver = false;
 
+//score points show
+var score;
+var highScore;
+
+//score values
+var scorePoints = 0;
+var highScorePoints = localStorage.getItem('highscore');
+if (highScorePoints == null) {
+    highScorePoints = 0;
+}
+
 window.onload = function() {
     board = document.getElementById('game-canvas');
+    score = document.getElementById('score');
+    score.textContent = "Score: " + scorePoints;
+    highScore = document.getElementById('high-score');
+    highScore.textContent = "High Score: " + highScorePoints;
     board.height = rows * blocksize;
     board.width = cols * blocksize;
     context = board.getContext('2d'); //this is for the board drawing
@@ -49,6 +64,13 @@ function update() {
     if(snakeX == foodX && snakeY == foodY) {
         snakeBody.push([foodX, foodY])
         snakefood();
+        scorePoints += 1;
+        score.textContent = "Score: " + scorePoints;
+        if (scorePoints > highScorePoints) {
+            highScorePoints = scorePoints;
+        }
+        localStorage.setItem('highscore', highScorePoints);
+        highScore.textContent = "High Score: " + highScorePoints;
     }
     
     for(let i = snakeBody.length-1; i > 0; i--){
@@ -86,6 +108,11 @@ function update() {
 function snakefood() {
     foodX = Math.floor(Math.random() * cols) * blocksize;
     foodY = Math.floor(Math.random() * rows) * blocksize;
+    for ( let i = 0; i < snakeBody.length; i++) {
+        if (foodX == snakeBody[i][0] && foodY == snakeBody[i][1]) {
+            snakefood();
+        }
+    }
 }
 
 function changeDirection(e) {

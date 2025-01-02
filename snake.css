@@ -4,3 +4,13 @@ body {
     text-align: center;
     background-color: #333;
 }
+
+.game-name{
+    color: #fff;
+}
+
+#score, #high-score {
+    display: inline-block;
+    width: 300px;
+    color: #fff;
+}
